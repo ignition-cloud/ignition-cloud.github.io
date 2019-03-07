@@ -1,0 +1,18 @@
+language: elm
+
+notifications:
+  email:
+    on_success: never
+
+script:
+  - elm make src/Main.elm --optimize --output=dist/index.html
+
+deploy:
+  provider: pages
+  github-token: $GITHUB_TOKEN
+  skip-cleanup: true
+  keep-history: true
+  target-branch: gh-pages
+  local-dir: ./dist
+  on:
+    branch: master
