@@ -1,11 +1,16 @@
-language: elm
+language: node_js
+node_js: node
+
+cache:
+  directories:
+    - node_modules
 
 notifications:
   email:
     on_success: never
 
 script:
-  - elm make src/Main.elm --optimize --output=dist/index.html
+  - yarn run prod:compress
 
 deploy:
   provider: pages
