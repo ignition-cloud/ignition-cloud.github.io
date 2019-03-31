@@ -20,7 +20,7 @@ module.exports = () => ({
                 ]
             },
             {
-                test: /\.less$/,
+                test: /\.css$|\.less$/,
                 use: [
                     'style-loader',
                     'css-loader',

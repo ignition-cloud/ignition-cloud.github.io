@@ -25,9 +25,9 @@ module.exports = () => ({
                 },
             },
             {
-                test: /\.less$/,
+                test: /\.css$|\.less$/,
                 use: [
-                    MiniCssExtractPlugin.loader,
+                    'style-loader',
                     'css-loader',
                     'postcss-loader',
                     'less-loader'
@@ -63,7 +63,7 @@ module.exports = () => ({
 
     plugins: [
         new MiniCssExtractPlugin({
-            filename: '[name].[hash].css',
+            filename: '[name].[contenthash].css',
         }),
 
         new PurgecssPlugin({

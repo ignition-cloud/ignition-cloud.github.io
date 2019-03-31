@@ -1,5 +1,6 @@
 'use strict';
 
+require('bulma/css/bulma.css');
 require('./css/main.less');
 const {Elm} = require('../elm/Main.elm');
 
