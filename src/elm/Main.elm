@@ -1,13 +1,11 @@
 module Main exposing (main)
 
 import Browser
-import Bulma.CDN as Bulma
 import Bulma.Elements exposing (..)
 import Bulma.Layout exposing (..)
 import Bulma.Modifiers exposing (..)
 import Bulma.Modifiers.Typography exposing (textCentered)
 import Html exposing (Attribute, Html, main_, p, strong, text)
-import Html.Attributes exposing (href, rel)
 
 
 type alias Model =
@@ -21,26 +19,26 @@ type Msg
 main : Program () Model Msg
 main =
     Browser.sandbox
-        { init = {}
+        { init = init
         , view = view
-        , update = \_ -> \model -> model
+        , update = update
         }
 
 
-fontAwesomeCDN =
-    Html.node "link"
-        [ rel "stylesheet"
-        , href "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-        ]
-        []
+init : Model
+init =
+    {}
+
+
+update : Msg -> Model -> Model
+update msg model =
+    model
 
 
 view : Model -> Html Msg
 view _ =
     main_ []
-        [ Bulma.stylesheet
-        , fontAwesomeCDN
-        , heroView
+        [ heroView
         , footerView
         ]
 
