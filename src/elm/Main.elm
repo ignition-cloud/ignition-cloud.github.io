@@ -113,21 +113,21 @@ valuePropositionsView =
                 []
                 [ box
                     []
-                    [ title H6 [] [ text "Guiding customers to find the right product offering for them" ]
+                    [ title H6 [] [ text "Create a path for customers to discover your product" ]
                     ]
                 ]
             , column valuePropColumnModifiers
                 []
                 [ box
                     []
-                    [ title H6 [] [ text "Shortening sales cycle by allowing Ignition to handle the high-touch sales" ]
+                    [ title H6 [] [ text "Help customers design what is right for them" ]
                     ]
                 ]
             , column valuePropColumnModifiers
                 []
                 [ box
                     []
-                    [ title H6 [] [ text "Reducing order errors by providing a unified product model" ]
+                    [ title H6 [] [ text "Build a simple product model from your complex business rules" ]
                     ]
                 ]
             ]
