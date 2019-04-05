@@ -7,42 +7,55 @@ import Bulma.Elements exposing (..)
 import Bulma.Layout exposing (..)
 import Bulma.Modifiers exposing (..)
 import Bulma.Modifiers.Typography exposing (textCentered)
-import Html exposing (Attribute, Html, br, main_, p, span, strong, text)
+import Demo
+import Html exposing (Attribute, Html, main_, p, span, strong, text)
 
 
 type alias Model =
-    {}
+    { demoModel : Demo.Model
+    }
 
 
 type Msg
-    = NoOp
+    = DemoMsg Demo.Msg
 
 
-main : Program () Model Msg
-main =
-    Browser.sandbox
-        { init = init
-        , view = view
-        , update = update
-        }
+init : () -> ( Model, Cmd Msg )
+init _ =
+    let
+        ( demoModel, demoCmd ) =
+            Demo.init
+                |> Tuple.mapSecond (Cmd.map DemoMsg)
+
+        model =
+            { demoModel = demoModel }
+
+        cmd =
+            Cmd.batch
+                [ demoCmd
+                ]
+    in
+    ( model, cmd )
 
 
-init : Model
-init =
-    {}
-
-
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    model
+    case msg of
+        DemoMsg submsg ->
+            let
+                demoModel =
+                    Demo.update submsg model.demoModel
+            in
+            ( { model | demoModel = demoModel }, Cmd.none )
 
 
 view : Model -> Html Msg
-view _ =
+view model =
     main_ []
         [ navbarView
         , heroView
         , valuePropositionsView
+        , Html.map DemoMsg <| Demo.view model.demoModel
         , footerView
         ]
 
@@ -69,7 +82,7 @@ navbarView =
 
 heroView : Html Msg
 heroView =
-    hero { heroModifiers | color = Primary, size = Medium }
+    hero { bold = True, color = Primary, size = Medium }
         []
         [ heroBody []
             [ columns columnsModifiers
@@ -86,20 +99,14 @@ heroView =
 
 heroColumnModifiers : ColumnModifiers
 heroColumnModifiers =
-    let
-        widths : Devices (Maybe Width)
-        widths =
-            columnModifiers.widths
-    in
-    { columnModifiers
-        | offset = Width1
-        , widths =
-            { widths
-                | tablet = Just Width10
-                , desktop = Just Width5
-                , widescreen = Just Width5
-                , fullHD = Just Width5
-            }
+    { offset = Width1
+    , widths =
+        { mobile = Just Auto
+        , tablet = Just Width10
+        , desktop = Just Width5
+        , widescreen = Just Width5
+        , fullHD = Just Width5
+        }
     }
 
 
@@ -136,20 +143,14 @@ valuePropositionsView =
 
 valuePropColumnModifiers : ColumnModifiers
 valuePropColumnModifiers =
-    let
-        widths : Devices (Maybe Width)
-        widths =
-            columnModifiers.widths
-    in
-    { columnModifiers
-        | offset = Auto
-        , widths =
-            { widths
-                | tablet = Just Width11
-                , desktop = Just Width6
-                , widescreen = Just Width4
-                , fullHD = Just Width3
-            }
+    { offset = Auto
+    , widths =
+        { mobile = Nothing
+        , tablet = Just Width11
+        , desktop = Just Width6
+        , widescreen = Just Width4
+        , fullHD = Just Width3
+        }
     }
 
 
@@ -166,3 +167,17 @@ footerView =
                 ]
             ]
         ]
+
+
+
+-- MAIN
+
+
+main : Program () Model Msg
+main =
+    Browser.element
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = \_ -> Sub.none
+        }
