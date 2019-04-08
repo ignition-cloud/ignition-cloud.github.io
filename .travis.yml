@@ -17,7 +17,7 @@ deploy:
   github-token: $GITHUB_TOKEN
   skip-cleanup: true
   keep-history: true
-  target-branch: gh-pages
+  target-branch: master
   local-dir: ./dist
   on:
-    branch: master
+    branch: staging
