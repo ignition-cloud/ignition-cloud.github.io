@@ -137,8 +137,8 @@ familyListItemView family =
 -- FAMILY DETAIL VIEW
 
 
-familyDetailView : Family -> Catalog -> Html Msg
-familyDetailView family catalog =
+familyDetailView : Family -> Html Msg
+familyDetailView family =
     column columnModifiers
         []
         (List.map itemListItemView family.items)
@@ -153,18 +153,32 @@ itemListItemView itemId =
 -- EXCLUSION RULES DETAIL VIEW
 
 
-exclusionRulesDetailView : Catalog -> Html Msg
-exclusionRulesDetailView catalog =
-    column columnModifiers [] []
+exclusionRulesDetailView : List ExclusionRule -> Html Msg
+exclusionRulesDetailView rules =
+    column columnModifiers [] <| List.map exclusionRuleView rules
+
+
+exclusionRuleView : ExclusionRule -> Html Msg
+exclusionRuleView rule =
+    Html.pre [] [ text (Debug.toString rule) ]
 
 
 
 -- INCLUSION RULES DETAIL VIEW
 
 
-inclusionRulesDetailView : Catalog -> Html Msg
-inclusionRulesDetailView catalog =
-    column columnModifiers [] []
+inclusionRulesDetailView : List InclusionRule -> Html Msg
+inclusionRulesDetailView rules =
+    column columnModifiers [] <| List.map inclusionRuleView rules
+
+
+inclusionRuleView : InclusionRule -> Html Msg
+inclusionRuleView rule =
+    Html.pre [] [ text (Debug.toString rule) ]
+
+
+
+-- TOP LEVEL VIEW
 
 
 view : Model -> Html Msg
@@ -181,20 +195,20 @@ view model =
 
         RemoteData.Success catalog ->
             let
-                detailView : Catalog -> Html Msg
+                detailView : Html Msg
                 detailView =
                     case model.detail_view of
                         NoView ->
-                            \_ -> column columnModifiers [] []
+                            column columnModifiers [] []
 
                         FamilyView family ->
                             familyDetailView family
 
                         ExclusionRulesView ->
-                            exclusionRulesDetailView
+                            exclusionRulesDetailView catalog.exclusions_rules
 
                         InclusionRulesView ->
-                            inclusionRulesDetailView
+                            inclusionRulesDetailView catalog.inclusions_rules
             in
             hero { bold = True, color = Dark, size = Small }
                 []
@@ -202,7 +216,7 @@ view model =
                     [ columns columnsModifiers
                         []
                         [ familyListView catalog.families
-                        , detailView catalog
+                        , detailView
                         ]
                     ]
                 ]
